@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import "./styles/jobResults.css"
 import { applyIcon, searchIcon } from './assets'
-import { Navbar } from './navbar'
+import NavBar from "./components/NavBar";
 
 const Card = ({ job, i }) => (
   <div className='recent_job_card' key={i}>
@@ -39,7 +39,7 @@ export default function JobResults() {
 
   return (
     <div className='job_results'>
-        <Navbar/>
+        <NavBar/>
       <div className='searchbox'>
         <img src={searchIcon} />
         <input placeholder='Search'></input>
