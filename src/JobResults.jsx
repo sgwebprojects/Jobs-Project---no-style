@@ -38,35 +38,37 @@ export default function JobResults() {
   const [timeZone, setTimeZone] = useState("ist");
 
   return (
-    <div className='job_results'>
-        <NavBar/>
-      <div className='searchbox'>
-        <img src={searchIcon} />
-        <input placeholder='Search'></input>
-        <button className='signin'>Search</button>
-      </div>
-      <div>
-        <div className='letssupport'>Show me job times in</div>
-        <div className='job_result_zone'>
-          <div className='job_result_zone_est' style={{ borderBottomColor: timeZone == "ist" ? "#DADDE0" : "#2557A7" }} onClick={() => setTimeZone("est")}>Eastern Standard Time (EST)</div>
-          <div className='job_result_zone_ist' style={{ borderBottomColor: timeZone == "est" ? "#DADDE0" : "#2557A7" }} onClick={() => setTimeZone("ist")}>Israel Standard Time (IST)</div>
+    <div>
+      <NavBar />
+
+      <div className='job_results'>
+        <div className='searchbox'>
+          <img src={searchIcon} />
+          <input placeholder='Search'></input>
+          <button className='signin'>Search</button>
         </div>
-      </div>
-      <div className='job_result_box'>
-        <div className='recent_job_list'>
-          {recentJobs.map((job, i) => (<Card job={job} i={i} />))}
-        </div>
-        <div className='job_result_cnt'>
-          <h4>Part Time - Dedicated Account Rep</h4>
-          <button className='job_result_btn'>Apply <img src={applyIcon} alt="" /></button>
-          <h5>Job type</h5>
-          <div className='job_result_tags'>
-            <div>Full Time</div>
-            <div>9am-5pm EST</div>
+        <div>
+          <div className='letssupport'>Show me job times in</div>
+          <div className='job_result_zone'>
+            <div className='job_result_zone_est' style={{ borderBottomColor: timeZone == "ist" ? "#DADDE0" : "#2557A7" }} onClick={() => setTimeZone("est")}>Eastern Standard Time (EST)</div>
+            <div className='job_result_zone_ist' style={{ borderBottomColor: timeZone == "est" ? "#DADDE0" : "#2557A7" }} onClick={() => setTimeZone("ist")}>Israel Standard Time (IST)</div>
           </div>
-          <h5>Job description</h5>
-          <div dangerouslySetInnerHTML={{
-            __html: `This role is open to recent University graduates and applicants with less than 5 years of prior experience in a quantitative trading role, for commencement in Austinmer, NSW, Australia.
+        </div>
+        <div className='job_result_box'>
+          <div className='recent_job_list'>
+            {recentJobs.map((job, i) => (<Card job={job} i={i} />))}
+          </div>
+          <div className='job_result_cnt'>
+            <h4>Part Time - Dedicated Account Rep</h4>
+            <button className='job_result_btn'>Apply <img src={applyIcon} alt="" /></button>
+            <h5>Job type</h5>
+            <div className='job_result_tags'>
+              <div>Full Time</div>
+              <div>9am-5pm EST</div>
+            </div>
+            <h5>Job description</h5>
+            <div dangerouslySetInnerHTML={{
+              __html: `This role is open to recent University graduates and applicants with less than 5 years of prior experience in a quantitative trading role, for commencement in Austinmer, NSW, Australia.
 
 Vacancies are open for September 2023 or March 2024 for domestic candidates (based in Australia) and September 2023 or March 2024 for international candidates (due to lengthy visa processing times).
 Tibra will sponsor the relevant visa, provide flights and some relocation assistance for international candidates.
@@ -94,7 +96,8 @@ Hours of work (IST): 4:00PM-12:00AM 
 
 Pay: $165,000.00 - $190,000.00 per year
 `.replace(/\n/g, '<br/>')
-          }}>
+            }}>
+            </div>
           </div>
         </div>
       </div>
