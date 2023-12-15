@@ -4,12 +4,14 @@ import { SearchBox } from './searchBox'
 import { Navbar } from './navbar'
 import { RecentlyPostedJobs } from './recentlyPostedJobs';
 import { useNavigate } from 'react-router-dom';
+import Home from './Home';
 
 function LandingPage() {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate('/jobsList/*');
   };
+  return <Home/>
   return (
     <>
       <Navbar />

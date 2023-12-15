@@ -4,6 +4,11 @@ import { useState } from 'react';
 import { collection, setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { database } from "./firebaseConfig";
 import { useNavigate } from 'react-router-dom';
+import { addMore, leftArrow, rightArrow } from './assets';
+import "./styles/jobPost.css";
+import AddIcon from './assets/AddIcon';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 
 export function PostJobForm() {
@@ -34,8 +39,8 @@ export function PostJobForm() {
     // const [startTimePeriod, setStartTimePeriod] = useState('');
     // const [finishTimePeriod, setFinishTimePeriod] = useState('');
 
-    function handleContinueBtn(cardNumber) {setCardNumber(cardNumber + 1)}
-    
+    function handleContinueBtn(cardNumber) { setCardNumber(cardNumber + 1) }
+
     function handleBackBtn(cardNumber) {
         if (cardNumber === 1) {
             navigate(-1)
@@ -92,44 +97,51 @@ export function PostJobForm() {
 
 
     return (
-        <Container>
+        <Container className='job_apply_form'>
             {cardNumber === 1 &&
                 <Card>
-                    <Card.Body>
-                        <Form>
-                            <Form.Group id='jobTitle'>
-                                <Form.Label>Job title *</Form.Label>
-                                <Form.Control type='text' required onChange={(e) => setJobTitle(e.target.value)} />
+                    <Card.Body className='job_apply_form_body'>
+                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields' >
+                            <Form.Group id='jobTitle' className='job_apply_field'>
+                                <Form.Label className='job_form_field'>Job title *</Form.Label>
+                                <Form.Control className='job_form_input' type='text' required onChange={(e) => setJobTitle(e.target.value)} />
                             </Form.Group>
-                            <Form.Group id='location'>
-                                <Form.Label>Where is your company located *</Form.Label>
-                                <Form.Control type='text' required onChange={(e) => setLocation(e.target.value)} />
+                            <Form.Group id='location' className='job_apply_field'>
+                                <Form.Label className='job_form_field'>Where is your company located *</Form.Label>
+                                <Form.Control className='job_form_input' type='text' required onChange={(e) => setLocation(e.target.value)} />
                             </Form.Group>
-                            <button onClick={() => handleBackBtn(1)}>Back</button>
-                            <button onClick={() => handleContinueBtn(1)}>continue</button>
+                            <div className='job_apply_end_btns'>
+                                <button className='job_form_back_btn' onClick={() => handleBackBtn(1)}>
+                                    <img src={leftArrow} alt="" />
+                                    Back</button>
+                                <button className='job_form_submit skill_btn' >
+                                    continue  <img src={rightArrow} alt="" />
+                                </button>
+                            </div>
                         </Form>
                     </Card.Body>
                 </Card>
             }
             {cardNumber === 2 &&
                 <Card>
-                    <Card.Body>
-                        <Form >
-                            <Form.Group id='jobType'>
-                                <Form.Label>Job type *</Form.Label>
-                                <div>
+                    <Card.Body className='job_apply_form_body'>
+                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
+                            <Form.Group className='job_apply_field' id='jobType'>
+                                <Form.Label className='job_form_field'>Job type *</Form.Label>
+                                <div className='job_apply_type_btns'>
                                     <button
-                                        className={`
-                                        ${selectedFullPart === 'full-time' ? 'active' : ''}`}
+                                        className={`job_post_time_btn ${selectedFullPart === 'full-time' ? 'job_active' : ''}`}
                                         type='button'
                                         onClick={() => setSelectedFullPart('full-time')} >
+                                        <AddIcon color={selectedFullPart === 'full-time' && "white"} />
                                         Full-time
                                     </button>
                                     <button
                                         type='button'
-                                        className={` ${selectedFullPart === 'part-time' ? 'active' : ''}`}
+                                        className={`job_post_time_btn    ${selectedFullPart === 'part-time' ? 'job_active' : ''}`}
                                         onClick={() => setSelectedFullPart('part-time')}
                                     >
+                                        <AddIcon color={selectedFullPart !== 'full-time' && "white"} />
                                         Part-time
                                     </button>
                                 </div>
@@ -138,40 +150,38 @@ export function PostJobForm() {
                             <Form.Select
                                 required
                                 value={selectedTime}
+                                className='job_apply_select'
                                 defaultValue={"Eastern Time (EST)"}
                                 onChange={(e) => setSelectedTime(e.target.value)}
                             >
                                 <option value={"Eastern Time (EST)"}>Eastern Time (EST)</option>
                                 <option value={"Israel Time (IST)"}>Israel Time (IST)</option>
                             </Form.Select>
+                            <Form.Group>
+                                <p className='job_form_field'>Work hours</p>
+                                <Form.Group className='job_edu_form_date'>
+                                    <div className='job_date_from_to'>
+                                        <Form.Label>From</Form.Label>
+                                        <Form.Select>
+                                            <option value="" key="">Month</option>
+                                        </Form.Select>
+                                        <Form.Label>Until</Form.Label>
+                                        <Form.Select>
+                                            <option value="" key="">Year</option>
+                                        </Form.Select>
+                                    </div>
+                                </Form.Group>
+                            </Form.Group>
 
-                            <input type="number" name="numberInput" min="1" max="24" defaultValue="8" onChange={(e) => setStartHour(e.target.value)} />
-                            <input type="number" name="numberInput" min="00" max="60" step="1" defaultValue="00" onChange={(e) => setStartMinutes(e.target.value)} />
 
-                            {/* <Form.Select required
-                                value={startTimePeriod}
-                                defaultValue="PM"
-                                onChange={(e) => setStartTimePeriod(e.target.value)}
-                            >
-                            <option>AM</option>
-                            <option>PM</option>
-                            </Form.Select> */}
-
-                            <input type="number" name="numberInput" min="1" max="12" defaultValue="8" onChange={(e) => setFinishHour(e.target.value)} />
-                            <input type="number" name="numberInput" min="00" max="60" step="1" defaultValue="00" onChange={(e) => setFinishMinutes(e.target.value)} />
-
-                            {/* <Form.Select required
-                                value={finishTimePeriod}
-                                defaultValue="PM"
-                                onChange={(e) => setFinishTimePeriod(e.target.value)}
-                            >
-                            <option>AM</option>
-                            <option>PM</option>
-                            </Form.Select> */}
-
-                            <button onClick={() => handleBackBtn(2)}>Back</button>
-                            <button onClick={() => handleContinueBtn(2)}>continue</button>
-
+                            <div className='job_apply_end_btns'>
+                                <button className='job_form_back_btn' onClick={() => handleBackBtn(2)}>
+                                    <img src={leftArrow} alt="" />
+                                    Back</button>
+                                <button className='job_form_submit skill_btn' >
+                                    continue  <img src={rightArrow} alt="" />
+                                </button>
+                            </div>
                         </Form>
 
                     </Card.Body>
@@ -179,80 +189,110 @@ export function PostJobForm() {
             }
             {cardNumber === 3 &&
                 <Card>
-                    <Card.Body>
-                        <Form>
+                    <Card.Body className='job_apply_form_body'>
+                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
                             <Form.Group>
-                                <Form.Label>Job description *</Form.Label>
+                                <Form.Label className='job_form_field'>Job description *</Form.Label>
+                                <ReactQuill theme="snow" defaultValue={`Overview
 
-                                <textarea
-                                    id="exampleFormControlTextarea1"
-                                    rows="5"
-                                    onChange={(e) => handleSetDescription(e.target.value)}
-                                />
-                                <button onClick={() => handleBackBtn(3)}>Back</button>
-                                <button onClick={() => handleContinueBtn(3)}>continue</button>
+Responsibilities to include coding and submitting claims, posting EOBs, denials, Medicaid billing, sending patient bills, follow-up on claim status, submit claims electronically, obtain and track drug authorizations, insurance eligibility. Candidate should be familiar with Ophthalmology ICD10 and CPT codes and strong knowledge of modifiers and payor rules. ASC facility billing also a plus but not required
+
+Job Type: Full-time
+
+Pay: $24.00 - $28.00 per hour
+
+Benefits:
+401(k)
+Dental insurance
+Health insurance
+Life insurance
+Paid time off
+Vision insurance
+
+Schedule:
+Monday to Friday
+
+Ability to commute/relocate:
+New York, NY 10011: Reliably commute or planning to relocate before starting work (Required)
+
+Experience:
+ICD-10: 2 years (Preferred)
+
+Work Location: Hybrid remote in New York, NY 10011
+`.split("\n").join("<br/>")} />
                             </Form.Group>
+                            <div className='job_apply_end_btns'>
+                                <button className='job_form_back_btn' onClick={() => handleBackBtn(3)}>
+                                    <img src={leftArrow} alt="" />
+                                    Back</button>
+                                <button className='job_form_submit skill_btn' >
+                                    continue  <img src={rightArrow} alt="" />
+                                </button>
+                            </div>
                         </Form>
-
                     </Card.Body>
                 </Card>
             }
             {cardNumber === 4 &&
 
                 <Card>
-                    <Card.Body>
-                        <Form>
-                            <Form.Group>
-                                <Form.Label>Show pay by</Form.Label>
-                                <Form.Select
-                                    required
-                                    value={selectedShowPay}
-                                    defaultValue={"Eastern Time (EST)"}
-                                    onChange={(e) => setSelectedShowPay(e.target.value)}
-                                >
-                                    <option value={"Range"}>Range</option>
-                                    <option value={"Starting amount"}>Starting amount</option>
-                                    <option value={"Starting amount"}>Starting amount</option>
-                                    <option value={"Maximum amount"}>Maximum amount</option>
-                                    <option value={"Exact amount"}>Exact amount</option>
+                    <Card.Body className='job_apply_form_body job_filter_body'>
+                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
+                            <div className='job_form_filter'>
 
-                                </Form.Select>
-                            </Form.Group>
-                            <Form.Group>
-
-                                <Form.Label>Minimum</Form.Label>
-
-                                <Form.Control type='text' required onChange={(e) => setMinPay(e.target.value)} />
-
-                                <p>to</p>
-                                <Form.Label>Maximum</Form.Label>
-                                <Form.Control type='text' required onChange={(e) => setMaxPay(e.target.value)} />
-
-                            </Form.Group>
-
-                            <Form.Group>
-                                <Form.Label>Rate</Form.Label>
-                                <Form.Select
-                                    required
-                                    value={selectedRatePer}
-                                    defaultValue={"per year"}
-                                    onChange={(e) => setSelectedRatePer(e.target.value)}
-                                >
-                                    <option value={"per year"}>per year</option>
-                                    <option value={"per hour"}>per hour</option>
-                                    <option value={"per day"}>per day</option>
-                                    <option value={"per week"}>per week</option>
-                                    <option value={"per year"}>per year</option>
-
-                                </Form.Select>
                                 <Form.Group>
+                                    <Form.Label className='job_form_field'>Show pay by</Form.Label>
+                                    <Form.Select
+                                        required className='job_filter_select'
+                                        value={selectedShowPay}
+                                        defaultValue={"Eastern Time (EST)"}
+                                        onChange={(e) => setSelectedShowPay(e.target.value)}
+                                    >
+                                        <option value={"Range"}>Range</option>
+                                        <option value={"Starting amount"}>Starting amount</option>
+                                        <option value={"Starting amount"}>Starting amount</option>
+                                        <option value={"Maximum amount"}>Maximum amount</option>
+                                        <option value={"Exact amount"}>Exact amount</option>
 
-                                    <button onClick={() => handleBackBtn(4)}>Back</button>
-                                    <button onClick={() => handleContinueBtn(4)}>continue</button>
+                                    </Form.Select>
+                                </Form.Group>
+                                <Form.Group className='job_form_filter'>
+                                    <div>
+                                        <Form.Label className='job_form_field'>Minimum</Form.Label>
+                                        <Form.Control value={"$67,1511.11"} className='job_form_input' type='text' required onChange={(e) => setMinPay(e.target.value)} />
+                                    </div>
+                                    <div>
+                                        <Form.Label className='job_form_field'>Maximum</Form.Label>
+                                        <Form.Control value={"$80,870.15"} className='job_form_input' type='text' required onChange={(e) => setMaxPay(e.target.value)} />
+                                    </div>
 
                                 </Form.Group>
-                            </Form.Group>
 
+                                <Form.Group>
+                                    <Form.Label className='job_form_field'>Rate</Form.Label>
+                                    <Form.Select
+                                        required className='job_filter_select'
+                                        value={selectedRatePer}
+                                        defaultValue={"per year"}
+                                        onChange={(e) => setSelectedRatePer(e.target.value)}
+                                    >
+                                        <option value={"per year"}>per year</option>
+                                        <option value={"per hour"}>per hour</option>
+                                        <option value={"per day"}>per day</option>
+                                        <option value={"per week"}>per week</option>
+                                        <option value={"per year"}>per year</option>
+
+                                    </Form.Select>
+                                </Form.Group>
+                            </div>
+                            <div className='job_apply_end_btns'>
+                                <button className='job_form_back_btn' onClick={() => handleBackBtn(3)}>
+                                    <img src={leftArrow} alt="" />
+                                    Back</button>
+                                <button className='job_form_submit skill_btn' >
+                                    continue  <img src={rightArrow} alt="" />
+                                </button>
+                            </div>
                         </Form>
 
                     </Card.Body>
@@ -261,8 +301,8 @@ export function PostJobForm() {
             {cardNumber === 5 &&
 
                 <Card>
-                    <Card.Body>
-                        <Form>
+                    <Card.Body className='job_apply_form_body'>
+                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
                             <h1>{jobTitle}</h1>
                             <h5>{selectedShowPay}</h5>
                             <h1>{selectedFullPart}</h1>
@@ -271,10 +311,14 @@ export function PostJobForm() {
                             <h5>{minPay}-{maxPay}</h5>
                             <h3>{selectedTime}</h3>
                             <h3>{selectedRatePer}</h3>
-                            <button onClick={() => handleBackBtn(5)}>Back</button>
-                            {/* i think there is an issue with this button being type=submit button: */}
-                            <button onClick={() => addJobPost()}>Submit</button>
-
+                            <div className='job_apply_end_btns'>
+                                <button className='job_form_back_btn' onClick={() => handleBackBtn(3)}>
+                                    <img src={leftArrow} alt="" />
+                                    Back</button>
+                                <button className='job_form_submit skill_btn' >
+                                    continue  <img src={rightArrow} alt="" />
+                                </button>
+                            </div>
                         </Form>
                     </Card.Body>
                 </Card>
