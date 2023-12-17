@@ -1,7 +1,46 @@
-import React, { useState } from 'react'
-import "./styles/jobResults.css"
-import { applyIcon, searchIcon } from './assets'
-import NavBar from "./components/NavBar";
+import React, { useEffect, useRef, useState } from 'react'
+import "../styles/jobResults.css"
+import { applyIcon, searchIcon } from '../assets'
+import NavBar from "../components/NavBar";
+import { useParams } from 'react-router-dom';
+import { collectionGroup, getDocs } from 'firebase/firestore';
+import { database } from '../firebaseConfig';
+
+async function searchJobs(searchTerm) {
+
+  try {
+    const postingJobsSubcollection = await getDocs(collectionGroup(database, "postingJobs"));
+    if (searchTerm === '*') {
+      const fetchedPostingJobsData = postingJobsSubcollection.docs.map(
+        (doc) => doc.data())
+        .filter((job) => job.isJobActive);
+      return fetchedPostingJobsData;
+    }
+    else {
+      const filteredJobs = postingJobsSubcollection.docs.filter(doc => {
+        const jobData = doc.data();
+        const normalizedJobTitle = jobData?.jobTitle?.toLowerCase()||"";
+        const normalizedJobDescription = jobData?.jobDescription?.toLowerCase()||"";
+        const normalizedSearchTerm = searchTerm?.toLowerCase()||"";
+
+        const jobTitleMatch = normalizedJobTitle.includes(normalizedSearchTerm);
+        const jobDescriptionMatch = normalizedJobDescription.includes(normalizedSearchTerm);
+
+        return (
+          (jobTitleMatch || jobDescriptionMatch) &&
+          jobData.isJobActive
+        )
+
+      });
+
+      const fetchedPostingJobsData = filteredJobs.map(doc => doc.data());
+      return fetchedPostingJobsData;
+    }
+  } catch (error) {
+    console.error("Error retrieving jobs", error);
+    return {}
+  }
+}
 
 const Card = ({ job, i }) => (
   <div className='recent_job_card' key={i}>
@@ -36,6 +75,18 @@ export default function JobResults() {
 
   const [recentJobs, setJobs] = useState(new Array(6).fill(jobObj))
   const [timeZone, setTimeZone] = useState("ist");
+  const params = useParams();
+  const searchTerm = useRef();
+
+  useEffect(() => { searchTerm.current.value = params.searchTerm || "" }, [])
+  async function fetchJobs() {
+    try {
+      const fetchedJobs = await searchJobs(searchTerm.current.value || params.searchTerm || "");
+      setJobs(fetchedJobs)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div>
@@ -44,8 +95,8 @@ export default function JobResults() {
       <div className='job_results'>
         <div className='searchbox'>
           <img src={searchIcon} />
-          <input placeholder='Search'></input>
-          <button className='signin'>Search</button>
+          <input placeholder='Search' ref={searchTerm} onChange={fetchJobs}></input>
+          <button className='signin' onClick={fetchJobs}>Search</button>
         </div>
         <div>
           <div className='letssupport'>Show me job times in</div>
@@ -56,7 +107,7 @@ export default function JobResults() {
         </div>
         <div className='job_result_box'>
           <div className='recent_job_list'>
-            {recentJobs.map((job, i) => (<Card job={job} i={i} />))}
+            {recentJobs.map((job, i) => (<Card job={job} i={i} key={i} />))}
           </div>
           <div className='job_result_cnt'>
             <h4>Part Time - Dedicated Account Rep</h4>

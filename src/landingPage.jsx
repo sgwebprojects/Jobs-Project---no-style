@@ -4,7 +4,7 @@ import { SearchBox } from './searchBox'
 import { Navbar } from './navbar'
 import { RecentlyPostedJobs } from './recentlyPostedJobs';
 import { useNavigate } from 'react-router-dom';
-import Home from './Home';
+import Home from './pages/Home';
 
 function LandingPage() {
   const navigate = useNavigate();

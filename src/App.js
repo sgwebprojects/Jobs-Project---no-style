@@ -1,13 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import LandingPage from './landingPage'
-import JobsList from './jobsList';
-import { Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react';
 import { JobContext, EstPreviewContext } from './Context';
-import { PostJobForm } from './postJobForm'
-import { JobApplyForm } from './jobApplyForm';
-import "./styles/index.css";
-import JobResults from './JobResults';
+import AllRoutes from './pages/AllRoutes';
+
 
 function App() {
   const [job, setJob] = useState('');
@@ -17,13 +12,7 @@ function App() {
   return <>
     <JobContext.Provider value={{ job: job, setJob: setJob }}>
       <EstPreviewContext.Provider value={{ estPreview: estPreview, setEstPreview: setEstPreview }}>
-          <Routes>
-            <Route path='/post' element={<PostJobForm />} />
-            <Route path='/apply' element={<JobApplyForm />} />
-            <Route path='/' element={<LandingPage />} />
-            <Route path='/results' element={<JobResults />} />
-            <Route path='jobsList/:searchTerm' element={<JobsList />} />
-          </Routes>
+        <AllRoutes/>
       </EstPreviewContext.Provider>
     </JobContext.Provider>
 
