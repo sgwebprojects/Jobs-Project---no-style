@@ -2,11 +2,11 @@ import React from 'react'
 import { Card, button, Container, Form } from 'react-bootstrap';
 import { useState } from 'react';
 import { collection, setDoc, doc, serverTimestamp } from "firebase/firestore";
-import { database } from "./firebaseConfig";
+import { database } from "../firebaseConfig";
 import { useNavigate } from 'react-router-dom';
-import { addMore, leftArrow, rightArrow } from './assets';
-import "./styles/jobPost.css";
-import AddIcon from './assets/AddIcon';
+import { addMore, leftArrow, rightArrow } from '../assets';
+import "../styles/jobPost.css";
+import AddIcon from '../assets/AddIcon';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 

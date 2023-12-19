@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Card, button, Container, Form } from 'react-bootstrap';
 import { collection, setDoc, doc, serverTimestamp } from "firebase/firestore";
-import { database } from "./firebaseConfig";
+import { database } from "../firebaseConfig";
 import { useNavigate } from 'react-router-dom';
-import { addMore, backArrowIcon, crossIcon, deleteIcon, dragIcon, orLineIcon, uploadIcon } from "./assets/index"
-import "./styles/jobApplyForm.css"
+import { addMore, backArrowIcon, crossIcon, deleteIcon, dragIcon, orLineIcon, uploadIcon } from "../assets"
+import "../styles/jobApplyForm.css"
 
 export function JobApplyForm() {
 
