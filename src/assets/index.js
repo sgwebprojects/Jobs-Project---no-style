@@ -32,6 +32,8 @@ import attachmentIcon from "./attachIcon.svg";
 import resumeIcon from "./resume.svg";
 import editIcon from "./editIcon.svg";
 import delteRedIcon from "./redDelete.svg";
+import googleIcon from "./gooogle.svg";
+import faceBookIcon from "./facebookIcon.svg"
 export {
     backArrowIcon, uploadIcon, orLineIcon, crossIcon, dragIcon, addMore, deleteIcon, leftArrow, rightArrow, optionsIcon,
     workIcon,
@@ -57,5 +59,7 @@ export {
     attachmentIcon,
     resumeIcon,
     editIcon,
-    delteRedIcon
+    delteRedIcon,
+    googleIcon,
+    faceBookIcon
 }
