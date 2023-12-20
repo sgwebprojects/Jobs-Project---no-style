@@ -12,7 +12,7 @@ const initState = [{
 
 for (let i = 0; i < 33; i++) initState.push(initState[Math.floor(Math.random() * 5)])
 
-export const Applications = () => {
+export const AdminApplications = () => {
 
     const [jobs, setJobs] = useState([])
     const [jobsLength, setJobLength] = useState(36);
