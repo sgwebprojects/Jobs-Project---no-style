@@ -485,3 +485,60 @@
     width: 20px;
     cursor: pointer;
 }
+
+.my_resume{
+    display: flex;
+    width: 80vw;
+    padding: 60px 32px;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    border-radius: 20px;
+    background: var(--Light-Color-100, #FFF);
+}
+
+.my_resume_box{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.resume_prof_details{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.resume_prof_edit_head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.my_resume_edit_imgs{
+    display: flex;
+    gap: 20px;
+}
+
+.my_resume_edit_imgs img{
+    cursor: pointer;
+}
+
+.my_resume_name{
+    color: var(--Text-Color-100, #0B1B33);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 38px;
+}
+
+.resume_desc_details{
+    color: var(--Text-Color-60, #6D7685);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px; /* 160% */
+}
+
+.job_apply_form_body_edit{
+    width: 60%;
+}

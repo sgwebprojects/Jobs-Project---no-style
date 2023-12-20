@@ -29,6 +29,9 @@ import backButtonIcon from "./backButton.svg";
 import proflieIcon from "./profile.svg"
 import messageStartIcon from "./message_start.svg";
 import attachmentIcon from "./attachIcon.svg";
+import resumeIcon from "./resume.svg";
+import editIcon from "./editIcon.svg";
+import delteRedIcon from "./redDelete.svg";
 export {
     backArrowIcon, uploadIcon, orLineIcon, crossIcon, dragIcon, addMore, deleteIcon, leftArrow, rightArrow, optionsIcon,
     workIcon,
@@ -51,5 +54,8 @@ export {
     backButtonIcon,
     proflieIcon,
     messageStartIcon,
-    attachmentIcon
+    attachmentIcon,
+    resumeIcon,
+    editIcon,
+    delteRedIcon
 }
