@@ -15,6 +15,7 @@ export default function AllRoutes() {
             <Route path='/' element={<LandingPage />} />
             <Route path='/results' element={<JobResults />} />
             <Route path='jobsList/:searchTerm' element={<JobResults />} />
+            <Route path='dashboard/' element={<DashBoard />} />
             <Route path='dashboard/:tab' element={<DashBoard />} />
         </Routes>
     )

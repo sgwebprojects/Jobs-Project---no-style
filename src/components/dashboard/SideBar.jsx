@@ -18,10 +18,10 @@ export const SideBar = ({selectedIndex = 0}) => {
                             to={link}
                             className={ ({isActive}) => isActive ? "dashboard_side_link dashboard_side_link_active " : "dashboard_side_link"}
                             key={i}>
-                        <img src={image} alt="" className=''/>
-                        <span>{name}</span>
+                            <img src={image} alt="" className=''/>
+                            <span>{name}</span>
                         </NavLink>
-                        ))}
+                    ))}
                 </div>
             </div>
             <div className="dashboard_side_link dashboard_side_logout">

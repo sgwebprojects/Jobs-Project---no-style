@@ -3,9 +3,9 @@ import "../styles/dashboard.css";
 import {SideBar} from "../components/dashboard/SideBar";
 import {useParams} from "react-router-dom";
 import {Header} from "../components/dashboard/Header";
-import {Applications} from "../components/dashboard/Applications";
 import {Inbox} from "../components/dashboard/Inbox";
 import {Jobs} from "../components/dashboard/Jobs";
+import {AdminApplications} from "../components/dashboard/AdminApplications";
 
 export default function DashBoard() {
 
@@ -24,7 +24,7 @@ export default function DashBoard() {
                     case "jobs":
                         return <Jobs/>
                     case "applications":
-                        return <Applications/>
+                        return <AdminApplications/>
                     case "inbox":
                         return <Inbox/>
                     default:
