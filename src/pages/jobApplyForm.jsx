@@ -346,7 +346,7 @@ export function JobApplyForm() {
                             <input className='job_form_input' type="text" placeholder='Add a skill' onChange={(e) => setSkill(e.target.value)} />
                             <img src={addMore} alt="" className='add_skill_img'/>
                         </div>
-                        
+
                         {skills?.map(skill => (
                             <h4 key={skill}>{skill}</h4>
                         ))}

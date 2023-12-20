@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {deleteIcon, inboxIcon, nextIcon} from "../../assets";
+import {deleteIcon, delteRedIcon, inboxIcon, nextIcon} from "../../assets";
 
 const initState = [{
     name: "Executive Administrative Assistant", createdAt: "July 23 2023",payable: "Accounts Payable"}, {
@@ -47,7 +47,7 @@ export const Applications = () => {
                     <div className='job_table_td'>{createdAt}</div>
                     <div className='job_table_td application_action'>
                         <img src={inboxIcon} alt=""/>
-                        <img src={deleteIcon} alt=""/>
+                        <img src={delteRedIcon} alt=""/>
                     </div>
                 </div>))}
                 <div className='pagination_boxes'>
