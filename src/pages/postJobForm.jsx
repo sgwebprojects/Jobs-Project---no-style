@@ -36,6 +36,24 @@ export function PostJobForm() {
     const [finishHour, setFinishHour] = useState('');
     const [startMinutes, setStartMinutes] = useState('');
     const [finishMinutes, setFinishMinutes] = useState('');
+
+
+    const [JobFormDetails, setFormDetails] = useState({
+        isEST: "Eastern Time (EST)",
+        isFullTimeJob: "full-time",
+        jobDescription: "",
+        startedTimeFrom: "",
+        endedTimeIn: "",
+        jobPaymentPer: "",
+        jobTitle: "",
+        jobLocation: { location: "" }
+    })
+
+    const handleUserInput = ({ name, value }) => {
+        console.log(name,value)
+        setFormDetails(prev => ({ ...prev, [name]: value }));
+    }
+
     // const [startTimePeriod, setStartTimePeriod] = useState('');
     // const [finishTimePeriod, setFinishTimePeriod] = useState('');
 
@@ -61,6 +79,7 @@ export function PostJobForm() {
         return `${hours}_${minutes}_${seconds}_${year}_${month}_${day}`;
     }
 
+
     const addJobPost = async (e) => {
         const persons = collection(database, "persons");
         const userId = "sarah5401021@gmail.com";
@@ -68,32 +87,41 @@ export function PostJobForm() {
             const selectedTime = "Eastern Time (EST)";
             return selectedTime === "Eastern Time (EST)";
         };
-
         const userRef = doc(persons, userId);
         const subcollectionRef = collection(userRef, "postingJobs");
         try {
+            // await setDoc(doc(subcollectionRef, getCurrentDateTimeString()), {
+            //     identityUserPublishId: userId,
+            //     isEST: isEst(),
+            //     isFullTimeJob: selectedFullPart,
+            //     jobDescription: description,
+            //     jobLocation: { location },
+            //     startedTimeFrom: `${startHour} : ${startMinutes}`, endedTimeIn: `${finishHour} : ${finishMinutes}`,
+            //     // jobPayment : {minPay} - {maxPay}, 
+            //     jobPaymentPer: selectedRatePer,
+            //     jobTitle: jobTitle,
+            //     updatedAt: serverTimestamp(),
+            //     isJobActive: true,
+            //     createdAt: serverTimestamp()
+            // });
             await setDoc(doc(subcollectionRef, getCurrentDateTimeString()), {
                 identityUserPublishId: userId,
-                isEST: isEst(),
-                isFullTimeJob: selectedFullPart,
-                jobDescription: description,
-                jobLocation: { location },
-                startedTimeFrom: `${startHour} : ${startMinutes}`,
-                endedTimeIn: `${finishHour} : ${finishMinutes}`,
                 // jobPayment : {minPay} - {maxPay}, 
-                jobPaymentPer: selectedRatePer,
-                jobTitle: jobTitle,
                 updatedAt: serverTimestamp(),
                 isJobActive: true,
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
+                ...JobFormDetails
             });
             console.log("Document added to subcollection successfully!");
-            navigate(-1)
+            // navigate(-1)
 
         } catch (error) {
             console.error("Error adding document:", error);
         }
     }
+
+    // addJobPost()
+    console.log(JobFormDetails)
 
 
     return (
@@ -101,14 +129,14 @@ export function PostJobForm() {
             {cardNumber === 1 &&
                 <Card>
                     <Card.Body className='job_apply_form_body'>
-                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields' >
+                        <Form onSubmit={(e) => { e.preventDefault(); handleContinueBtn(cardNumber) }} className='job_form_apply_fields' >
                             <Form.Group id='jobTitle' className='job_apply_field'>
                                 <Form.Label className='job_form_field'>Job title *</Form.Label>
-                                <Form.Control className='job_form_input' type='text' required onChange={(e) => setJobTitle(e.target.value)} />
+                                <Form.Control className='job_form_input' type='text' name='jobTitle' required onChange={(e) => handleUserInput(e.target)} />
                             </Form.Group>
                             <Form.Group id='location' className='job_apply_field'>
                                 <Form.Label className='job_form_field'>Where is your company located *</Form.Label>
-                                <Form.Control className='job_form_input' type='text' required onChange={(e) => setLocation(e.target.value)} />
+                                <Form.Control className='job_form_input' type='text' name='jobLocation' required onChange={(e) => handleUserInput(e.target)} />
                             </Form.Group>
                             <div className='job_apply_end_btns'>
                                 <button className='job_form_back_btn' onClick={() => handleBackBtn(1)}>
@@ -125,23 +153,23 @@ export function PostJobForm() {
             {cardNumber === 2 &&
                 <Card>
                     <Card.Body className='job_apply_form_body'>
-                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
+                        <Form onSubmit={(e) => { e.preventDefault(); handleContinueBtn(cardNumber) }} className='job_form_apply_fields'>
                             <Form.Group className='job_apply_field' id='jobType'>
                                 <Form.Label className='job_form_field'>Job type *</Form.Label>
                                 <div className='job_apply_type_btns'>
                                     <button
-                                        className={`job_post_time_btn ${selectedFullPart === 'full-time' ? 'job_active' : ''}`}
+                                        className={`job_post_time_btn ${JobFormDetails.isFullTimeJob === 'full-time' ? 'job_active' : ''}`}
                                         type='button'
-                                        onClick={() => setSelectedFullPart('full-time')} >
-                                        <AddIcon color={selectedFullPart === 'full-time' && "white"} />
+                                        onClick={() => setFormDetails(prev => ({ ...prev, isFullTimeJob: 'full-time' }))} >
+                                        <AddIcon color={JobFormDetails.isFullTimeJob === 'full-time' && "white"} />
                                         Full-time
                                     </button>
                                     <button
                                         type='button'
-                                        className={`job_post_time_btn    ${selectedFullPart === 'part-time' ? 'job_active' : ''}`}
-                                        onClick={() => setSelectedFullPart('part-time')}
+                                        className={`job_post_time_btn    ${JobFormDetails.isFullTimeJob === 'part-time' ? 'job_active' : ''}`}
+                                        onClick={() => setFormDetails(prev => ({ ...prev, isFullTimeJob: 'full-time' }))}
                                     >
-                                        <AddIcon color={selectedFullPart !== 'full-time' && "white"} />
+                                        <AddIcon color={JobFormDetails.isFullTimeJob !== 'full-time' && "white"} />
                                         Part-time
                                     </button>
                                 </div>
@@ -151,23 +179,26 @@ export function PostJobForm() {
                                 required
                                 value={selectedTime}
                                 className='job_apply_select'
-                                defaultValue={"Eastern Time (EST)"}
-                                onChange={(e) => setSelectedTime(e.target.value)}
+                                defaultValue={true}
+                                name='isEst'
+                                onChange={(e) => setFormDetails(prev=>({...prev,isEST: JSON.parse(e.target.value)}))}
                             >
-                                <option value={"Eastern Time (EST)"}>Eastern Time (EST)</option>
-                                <option value={"Israel Time (IST)"}>Israel Time (IST)</option>
+                                <option value={true}>Eastern Time (EST)</option>
+                                <option value={false}>Israel Time (IST)</option>
                             </Form.Select>
                             <Form.Group>
                                 <p className='job_form_field'>Work hours</p>
                                 <Form.Group className='job_edu_form_date'>
                                     <div className='job_date_from_to'>
                                         <Form.Label>From</Form.Label>
-                                        <Form.Select>
-                                            <option value="" key="">Month</option>
+                                        <Form.Select defaultValue={"8: 00 AM"} value={JobFormDetails.startedTimeFrom} className='job_form_select' name='startedTimeFrom' onChange={(e) => handleUserInput(e.target)}>
+                                            {new Array(12).fill(1).map((e, i) => <option key={i}>{`${i + 1}: 00 AM`}</option>)}
+                                            {new Array(12).fill(1).map((e, i) => <option key={i}>{`${i + 1}: 00 PM`}</option>)}
                                         </Form.Select>
                                         <Form.Label>Until</Form.Label>
-                                        <Form.Select>
-                                            <option value="" key="">Year</option>
+                                        <Form.Select defaultValue={"6: 00 PM"} value={JobFormDetails.endedTimeIn} name='endedTimeIn'>
+                                            {new Array(12).fill(1).map((e, i) => <option key={i}>{`${i + 1}: 00 AM`}</option>)}
+                                            {new Array(12).fill(1).map((e, i) => <option key={i}>{`${i + 1}: 00 PM`}</option>)}
                                         </Form.Select>
                                     </div>
                                 </Form.Group>
@@ -190,10 +221,10 @@ export function PostJobForm() {
             {cardNumber === 3 &&
                 <Card>
                     <Card.Body className='job_apply_form_body'>
-                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
+                        <Form onSubmit={(e) => { e.preventDefault(); handleContinueBtn(cardNumber) }} className='job_form_apply_fields'>
                             <Form.Group>
                                 <Form.Label className='job_form_field'>Job description *</Form.Label>
-                                <ReactQuill theme="snow" defaultValue={`Overview
+                                <ReactQuill theme="snow" onChange={(e) => { setFormDetails(prev => ({ ...prev, jobDescription: e })) }} defaultValue={`Overview
 
 Responsibilities to include coding and submitting claims, posting EOBs, denials, Medicaid billing, sending patient bills, follow-up on claim status, submit claims electronically, obtain and track drug authorizations, insurance eligibility. Candidate should be familiar with Ophthalmology ICD10 and CPT codes and strong knowledge of modifiers and payor rules. ASC facility billing also a plus but not required
 
@@ -237,16 +268,16 @@ Work Location: Hybrid remote in New York, NY 10011
 
                 <Card>
                     <Card.Body className='job_apply_form_body job_filter_body'>
-                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
+                        <Form onSubmit={(e) => { e.preventDefault(); handleContinueBtn(cardNumber) }} className='job_form_apply_fields'>
                             <div className='job_form_filter'>
 
                                 <Form.Group>
                                     <Form.Label className='job_form_field'>Show pay by</Form.Label>
                                     <Form.Select
                                         required className='job_filter_select'
-                                        value={selectedShowPay}
+                                        value={JobFormDetails.isEST}
                                         defaultValue={"Eastern Time (EST)"}
-                                        onChange={(e) => setSelectedShowPay(e.target.value)}
+                                        name=''
                                     >
                                         <option value={"Range"}>Range</option>
                                         <option value={"Starting amount"}>Starting amount</option>
@@ -272,9 +303,10 @@ Work Location: Hybrid remote in New York, NY 10011
                                     <Form.Label className='job_form_field'>Rate</Form.Label>
                                     <Form.Select
                                         required className='job_filter_select'
-                                        value={selectedRatePer}
+                                        value={JobFormDetails.jobPaymentPer}
                                         defaultValue={"per year"}
-                                        onChange={(e) => setSelectedRatePer(e.target.value)}
+                                        name='jobPaymentPer'
+                                        onChange={(e) => handleUserInput(e.target)}
                                     >
                                         <option value={"per year"}>per year</option>
                                         <option value={"per hour"}>per hour</option>
@@ -302,7 +334,7 @@ Work Location: Hybrid remote in New York, NY 10011
 
                 <Card>
                     <Card.Body className='job_apply_form_body'>
-                        <Form onSubmit={(e)=>{e.preventDefault(); handleContinueBtn(cardNumber)}} className='job_form_apply_fields'>
+                        <Form onSubmit={(e) => { e.preventDefault(); }} className='job_form_apply_fields'>
                             <h1>{jobTitle}</h1>
                             <h5>{selectedShowPay}</h5>
                             <h1>{selectedFullPart}</h1>
@@ -315,8 +347,10 @@ Work Location: Hybrid remote in New York, NY 10011
                                 <button className='job_form_back_btn' onClick={() => handleBackBtn(3)}>
                                     <img src={leftArrow} alt="" />
                                     Back</button>
-                                <button className='job_form_submit skill_btn' >
-                                    continue  <img src={rightArrow} alt="" />
+                                <button className='job_form_submit skill_btn' onClick={()=>{
+                                    addJobPost()
+                                }} >
+                                    Submit  <img src={rightArrow} alt="" />
                                 </button>
                             </div>
                         </Form>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Card, button, Container, Form } from 'react-bootstrap';
-import { collection, setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { collection, setDoc, doc, serverTimestamp, getDoc, updateDoc, addDoc, arrayUnion, getDocs } from "firebase/firestore";
 import { database } from "../firebaseConfig";
 import { useNavigate } from 'react-router-dom';
 import { addMore, backArrowIcon, crossIcon, deleteIcon, dragIcon, orLineIcon, uploadIcon } from "../assets"
@@ -76,6 +76,56 @@ export function JobApplyForm() {
         }
     }
 
+    const updatePostJObs = async () => {
+        try {
+            const persons = collection(database, "persons");
+            const userId = "sarah5401021@gmail.com";
+            const userRef = doc(persons, userId);
+            const subcollectionRef = collection(userRef, "postingJobs");
+    
+            const postedJobs = await getDocs(subcollectionRef);
+    
+            postedJobs.forEach(async (doc) => {
+                const docRef = doc(subcollectionRef, doc.id);
+    
+                try {
+                    await updateDoc(docRef, {
+                        identitiesUserApplyes: arrayUnion(userId),
+                    });
+                    console.log("Document updated successfully");
+                } catch (error) {
+                    console.error("Error updating document:", error.message);
+                }
+            });
+    
+            console.log("Updated identitiesUserApplyes array with the user ID");
+        } catch (error) {
+            console.error("Error fetching or updating documents:", error.message);
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const persons = collection(database, "persons");
+            const userId = "sarah5401021@gmail.com";
+            const userRef = doc(persons, userId);
+            const subcollectionRef = collection(userRef, "applyJobs");
+
+            const applyDetails = {
+                name: `${firstName} ${lastName}`,
+                postJobId: "13_12_23_2023_12_18_123@gmail.com",
+                phone, city, skills: skill
+            };
+
+            //  await addDoc(subcollectionRef, applyDetails);
+            await updatePostJObs();
+            // console.log("Application submitted successfully!");
+        } catch (error) {
+            console.error("Error submitting application:", error);
+        }
+    };
+
+
     const SaveAndExit = ({ page }) => {
         return (<div className='job_save_exit'>
             <div className='job_save_exit_head'>
@@ -95,7 +145,7 @@ export function JobApplyForm() {
                 <Card>
                     <Card.Body className='job_apply_form_body'>
                         <SaveAndExit page={cardNumber} />
-                        <Form className='job_form_apply_fields' onSubmit={(e)=>{e.preventDefault();setCardNumber(2)}}>
+                        <Form className='job_form_apply_fields' onSubmit={(e) => { e.preventDefault(); setCardNumber(2) }}>
                             <h4 className=''>Add your contact information</h4>
                             <div className='job_apply_field'>
                                 <Form.Label className='job_form_field'>First name</Form.Label>
@@ -131,7 +181,7 @@ export function JobApplyForm() {
                 <Card>
                     <Card.Body className='job_apply_form_body'>
                         <SaveAndExit page={cardNumber} />
-                        <Form className='job_form_apply_fields' onSubmit={(e)=>{e.preventDefault();setCardNumber(3)}}>
+                        <Form className='job_form_apply_fields' onSubmit={(e) => { e.preventDefault(); setCardNumber(3) }}>
                             <h4>Add a resume for the employer</h4>
 
                             <Container className='job_apply_upload_box'>
@@ -196,7 +246,7 @@ export function JobApplyForm() {
                 <Card>
                     <Card.Body className='job_apply_form_body'>
                         <SaveAndExit page={cardNumber} />
-                        <Form className='job_form_apply_fields' onSubmit={(e)=>{e.preventDefault();setCardNumber(5)}}>
+                        <Form className='job_form_apply_fields' onSubmit={(e) => { e.preventDefault(); setCardNumber(5) }}>
                             <div>
                                 <p className='job_form_upload_desc'>Build your resume (1 of 4)</p>
                                 <p className='job_form_field'>Do you want to add any education details?</p>
@@ -251,7 +301,7 @@ export function JobApplyForm() {
                 <Card>
                     <Card.Body className='job_apply_form_body'>
                         <SaveAndExit page={cardNumber} />
-                        <Form className='job_form_apply_fields' onSubmit={(e)=>{e.preventDefault();setCardNumber(6)}}>
+                        <Form className='job_form_apply_fields' onSubmit={(e) => { e.preventDefault(); setCardNumber(6) }}>
                             <Form.Text>Do you want to add work history?</Form.Text>
                             <Form.Group>
                                 <Form.Label className='job_form_field'>Job title *</Form.Label>
@@ -310,7 +360,7 @@ export function JobApplyForm() {
                 <Card>
                     <Card.Body className='job_apply_form_body'>
                         <SaveAndExit page={cardNumber} />
-                        <Form className='job_form_apply_fields' onSubmit={(e)=>{e.preventDefault();setCardNumber(7)}}>
+                        <Form className='job_form_apply_fields' onSubmit={(e) => { e.preventDefault(); setCardNumber(7) }}>
                             <div>
                                 <p className='job_form_upload_desc'>Build your resume (3 of 4)</p>
                                 <label htmlFor="phone">Do you want to share some of your skills?</label>
@@ -331,30 +381,30 @@ export function JobApplyForm() {
 
             {cardNumber === 7 &&
                 <Card>
-                <Card.Body className='job_apply_form_body'>
-                    <SaveAndExit page={cardNumber} />
-                    <Form className='job_form_apply_fields' onSubmit={(e)=>e.preventDefault()}>
-                        <div>
-                            <p className='job_form_upload_desc'>Build your resume (3 of 4)</p>
-                            <label htmlFor="phone">Do you want to share some of your skills?</label>
-                        </div>
-                        <div className='job_form_field_dlt_box'>
-                            <input className='job_form_input' type="text" value="Programming" onChange={(e) => setSkill(e.target.value)} />
-                            <img src={deleteIcon} alt=""  />
-                        </div>
-                        <div className='job_form_field_box'>
-                            <input className='job_form_input' type="text" placeholder='Add a skill' onChange={(e) => setSkill(e.target.value)} />
-                            <img src={addMore} alt="" className='add_skill_img'/>
-                        </div>
+                    <Card.Body className='job_apply_form_body'>
+                        <SaveAndExit page={cardNumber} />
+                        <Form className='job_form_apply_fields' onSubmit={(e) => { e.preventDefault(); submitApply() }}>
+                            <div>
+                                <p className='job_form_upload_desc'>Build your resume (3 of 4)</p>
+                                <label htmlFor="phone">Do you want to share some of your skills?</label>
+                            </div>
+                            <div className='job_form_field_dlt_box'>
+                                <input className='job_form_input' type="text" value="Programming" onChange={(e) => setSkill(e.target.value)} />
+                                <img src={deleteIcon} alt="" />
+                            </div>
+                            <div className='job_form_field_box'>
+                                <input className='job_form_input' type="text" placeholder='Add a skill' onChange={(e) => setSkill(e.target.value)} />
+                                <img src={addMore} alt="" className='add_skill_img' />
+                            </div>
 
-                        {skills?.map(skill => (
-                            <h4 key={skill}>{skill}</h4>
-                        ))}
+                            {skills?.map(skill => (
+                                <h4 key={skill}>{skill}</h4>
+                            ))}
 
-                        <button onClick={()=>setCardNumber(7)} className='job_form_submit skill_btn'>Submit</button>
-                    </Form>
-                </Card.Body>
-            </Card>
+                            <button onClick={() => handleSubmit()} type='submit' className='job_form_submit skill_btn'>Submit</button>
+                        </Form>
+                    </Card.Body>
+                </Card>
             }
         </Container>
     )

@@ -67,3 +67,8 @@
     border: 1px solid var(--Text-Color-60, #6D7685);
     width: fit-content;
 }
+
+
+.job_form_select{
+    height: 200px;
+}
