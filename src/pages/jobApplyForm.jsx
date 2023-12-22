@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useId } from 'react'
 import { Card, button, Container, Form } from 'react-bootstrap';
 import { collection, setDoc, doc, serverTimestamp, getDoc, updateDoc, addDoc, arrayUnion, getDocs } from "firebase/firestore";
 import { database } from "../firebaseConfig";
@@ -76,35 +76,28 @@ export function JobApplyForm() {
         }
     }
 
-    const updatePostJObs = async () => {
+    const updatePostJobs = async (postJobId) => {
         try {
             const persons = collection(database, "persons");
             const userId = "sarah5401021@gmail.com";
-            const userRef = doc(persons, userId);
+            const userRef = doc(persons, "123@gmail.com");
             const subcollectionRef = collection(userRef, "postingJobs");
-    
-            const postedJobs = await getDocs(subcollectionRef);
-    
-            postedJobs.forEach(async (doc) => {
-                const docRef = doc(subcollectionRef, doc.id);
-    
-                try {
-                    await updateDoc(docRef, {
-                        identitiesUserApplyes: arrayUnion(userId),
-                    });
-                    console.log("Document updated successfully");
-                } catch (error) {
-                    console.error("Error updating document:", error.message);
-                }
-            });
-    
+
+            const postedJob = doc(subcollectionRef, postJobId);
+
+            await setDoc(postedJob, {
+                identitiesUserApplyes: arrayUnion("userId@gmail.com")
+            }, { merge: true });
+
             console.log("Updated identitiesUserApplyes array with the user ID");
         } catch (error) {
             console.error("Error fetching or updating documents:", error.message);
         }
     };
 
-    const handleSubmit = async () => {
+
+
+    const handleSubmit = async (postJobId = "11_43_29_2023_12_19") => {
         try {
             const persons = collection(database, "persons");
             const userId = "sarah5401021@gmail.com";
@@ -113,13 +106,13 @@ export function JobApplyForm() {
 
             const applyDetails = {
                 name: `${firstName} ${lastName}`,
-                postJobId: "13_12_23_2023_12_18_123@gmail.com",
+                postJobId,
                 phone, city, skills: skill
             };
 
-            //  await addDoc(subcollectionRef, applyDetails);
-            await updatePostJObs();
-            // console.log("Application submitted successfully!");
+            await addDoc(subcollectionRef, applyDetails);
+            await updatePostJobs(postJobId);
+            console.log("Application submitted successfully!");
         } catch (error) {
             console.error("Error submitting application:", error);
         }
